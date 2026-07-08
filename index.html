@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="it">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#ff4fd8" />
+  <meta name="description" content="Sorteggio presidente e segretario per riunioni di condominio, in stile award show." />
+  <title>Condominio Awards</title>
+  <link rel="manifest" href="manifest.webmanifest" />
+  <link rel="apple-touch-icon" href="icons/icon-192.png" />
+  <link rel="icon" href="icons/icon-192.png" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="noise" aria-hidden="true"></div>
+
+  <main class="app-shell">
+    <section class="hero card brutal-shadow">
+      <div class="sticker">Offline PWA</div>
+      <p class="eyebrow">Assemblea condominiale presenta</p>
+      <h1>Condominio Awards</h1>
+      <p class="subtitle">Sorteggio spettacolare di <strong>Segretario</strong> e <strong>Presidente</strong>, con suspense da Oscar e nessuna possibilità di fuga.</p>
+    </section>
+
+    <button class="sound-btn" type="button" id="soundBtn" aria-pressed="true">🔊 Audio ON</button>
+
+    <section class="setup card brutal-shadow" id="setupPanel">
+      <label for="interniInput">Quanti interni partecipano?</label>
+      <div class="input-row">
+        <button class="mini-btn" type="button" id="minusBtn" aria-label="Diminuisci interni">−</button>
+        <input id="interniInput" type="number" min="2" max="999" value="15" inputmode="numeric" />
+        <button class="mini-btn" type="button" id="plusBtn" aria-label="Aumenta interni">+</button>
+      </div>
+      <p class="hint">Verranno sorteggiati due interni diversi: prima il segretario, poi il presidente.</p>
+      <button class="primary-btn" type="button" id="startBtn">Avvia la selezione</button>
+    </section>
+
+    <section class="stage card brutal-shadow hidden" id="stagePanel" aria-live="polite">
+      <div class="stage-top">
+        <div class="role-pill" id="rolePill">Segretario</div>
+        <div class="live-dot"><span></span> in diretta dall'androne</div>
+      </div>
+
+      <div class="spotlight">
+        <div class="curtain left-curtain" aria-hidden="true"></div>
+        <div class="curtain right-curtain" aria-hidden="true"></div>
+        <div class="number-display" id="numberDisplay">?</div>
+      </div>
+
+      <h2 id="announcement">Tra poco scopriremo il segretario...</h2>
+      <p class="suspense" id="suspenseText">Preparare il verbale, grazie.</p>
+
+      <div class="actions">
+        <button class="primary-btn" type="button" id="revealBtn">Apri la busta</button>
+        <button class="secondary-btn" type="button" id="resetBtn">Ricomincia</button>
+      </div>
+    </section>
+
+    <section class="results card brutal-shadow hidden" id="resultsPanel">
+      <p class="eyebrow">Verdetto ufficiale</p>
+      <div class="result-grid">
+        <article>
+          <span>Segretario</span>
+          <strong id="secretaryResult">—</strong>
+        </article>
+        <article>
+          <span>Presidente</span>
+          <strong id="presidentResult">—</strong>
+        </article>
+      </div>
+      <button class="secondary-btn full" type="button" id="newDrawBtn">Nuova riunione, nuova tragedia</button>
+    </section>
+  </main>
+
+  <footer class="app-footer">
+    powered by <a href="https://www.randomlandscape.com" target="_blank" rel="noopener" aria-label="Apri il sito Random Landscape">Random Landscape</a>
+  </footer>
+
+  <div class="confetti" id="confetti" aria-hidden="true"></div>
+
+  <template id="confettiPieceTemplate">
+    <span class="confetti-piece"></span>
+  </template>
+
+  <script src="app.js" defer></script>
+</body>
+</html>
