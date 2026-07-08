@@ -1,4 +1,4 @@
-const CACHE_NAME = 'condominio-awards-v3-footer';
+const CACHE_NAME = 'condominio-awards-v5-reading-pauses';
 const ASSETS = [
   './',
   './index.html',

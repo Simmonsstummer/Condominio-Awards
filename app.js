@@ -169,20 +169,162 @@ let president = null;
 let currentStep = 'secretary';
 let busy = false;
 
+function pick(list) {
+  return list[Math.floor(Math.random() * list.length)];
+}
+
+function readingDelay(...parts) {
+  const text = parts.filter(Boolean).join(' ');
+  const chars = text.length;
+  return Math.min(4200, Math.max(1500, chars * 34));
+}
+
+function finalReadingDelay(isPresident, ...parts) {
+  const text = parts.filter(Boolean).join(' ');
+  const base = Math.min(5200, Math.max(2600, text.length * 38));
+  return isPresident ? base + 4500 : base;
+}
+
 const copy = {
   secretary: {
     role: 'Segretario',
-    intro: 'La categoria è: persona che compilerà il verbale senza piangere.',
-    reveal: 'E il segretario di questa edizione della riunione di condominio è...',
-    winner: (n) => `l’interno ${n}!!`,
-    after: 'Applausi misurati dal quarto piano.'
+    intro: [
+      'La categoria è: persona che compilerà il verbale senza piangere.',
+      'Si comincia con il ruolo più sottovalutato e più maledetto: il segretario.',
+      'Premio speciale “ho capito tutto ma lo scrivo lo stesso”: categoria Segretario.',
+      'Primo sorteggio: chi trasformerà il caos in un documento Word.',
+      'È il momento di scegliere chi fingerà di riuscire a seguire tutti gli interventi.',
+      'Categoria Segretario: penna pronta, pazienza finita.',
+      'Chi avrà l’onore di scrivere “si apre la discussione” mentre si apre l’inferno?',
+      'Stiamo per assegnare il ruolo a cui nessuno ha fatto campagna elettorale.',
+      'Prima carica della serata: il martire del verbale.',
+      'La busta del segretario è pronta. Il toner della pazienza no.'
+    ],
+    reveal: [
+      'E il segretario di questa edizione della riunione di condominio è...',
+      'Per la categoria “scrivere tutto senza insultare nessuno”, vince...',
+      'La giuria dei millesimi ha deliberato: il nuovo segretario è...',
+      'Dopo attenta valutazione, e totale casualità, il segretario è...',
+      'La busta dice che il verbale finirà nelle mani di...',
+      'Tra stupore, deleghe e sedie di plastica, il segretario sarà...',
+      'Il destino ha aperto Excel e ha scelto...',
+      'L’androne trattiene il respiro: il segretario è...',
+      'A prendere appunti mentre tutti parlano insieme sarà...',
+      'Il prescelto della penna blu è...'
+    ],
+    suspense: [
+      'Momento di suspense... silenzio in sala, per quanto possibile.',
+      'Le scale A e B trattengono il respiro.',
+      'Si sente solo il rumore dei millesimi che cadono.',
+      'Attenzione: qualcuno sta già preparando una contestazione.',
+      'Il verbale non si scriverà da solo. Purtroppo.',
+      'Silenzio assoluto. Anche dal lastrico solare.',
+      'La busta si apre lentamente, come un portone senza manutenzione.',
+      'Nessun interno è al sicuro.',
+      'Suspense più alta del fondo cassa.',
+      'Il destino sta facendo le fotocopie.'
+    ],
+    winner: [
+      (n) => `l’interno ${n}!!`,
+      (n) => `l’interno ${n}! Che la penna sia con te.`,
+      (n) => `l’interno ${n}! Applausi, ma senza verbalizzarli.`,
+      (n) => `l’interno ${n}! Hai vinto un verbale e perso una serata.`,
+      (n) => `l’interno ${n}! La storia condominiale ti osserva.`,
+      (n) => `l’interno ${n}! È ufficiale: scriverai tu il caos.`,
+      (n) => `l’interno ${n}! Firma qui, qui e anche qui.`,
+      (n) => `l’interno ${n}! Il quaderno ti aspettava.`,
+      (n) => `l’interno ${n}! Nessun ricorso prima del caffè.`,
+      (n) => `l’interno ${n}! Congratulazioni, credo.`
+    ],
+    after: [
+      'Applausi misurati dal quarto piano.',
+      'Il verbale ringrazia. Il vincitore un po’ meno.',
+      'Primo punto all’ordine del giorno: sopravvivere.',
+      'Il condominio approva con entusiasmo moderato.',
+      'La penna passa ufficialmente di mano.',
+      'Si registrano sorrisi nervosi e una delega sospetta.',
+      'Momento storico. Non necessariamente bello, ma storico.',
+      'Il notaio non c’è, ma l’ansia sì.',
+      'Il pubblico rumoreggia civilmente. Forse.',
+      'Il segretario è fatto. Ora arriva il pezzo grosso.'
+    ],
+    waiting: [
+      'Prima la busta del segretario.',
+      'Apriamo con il ruolo che nessuno voleva nominare.',
+      'Scaldiamo l’assemblea con una piccola tragedia amministrativa.',
+      'Cominciamo piano: solo una vittima del verbale.',
+      'Prima estrazione: penna, verbale e rassegnazione.'
+    ]
   },
   president: {
     role: 'Presidente',
-    intro: 'Ora la carica più temuta dopo il responsabile delle chiavi del terrazzo.',
-    reveal: 'E il presidente di questa edizione della riunione di condominio è...',
-    winner: (n) => `l’interno ${n}!!`,
-    after: 'Standing ovation, salvo impugnazioni.'
+    intro: [
+      'Ora la carica più temuta dopo il responsabile delle chiavi del terrazzo.',
+      'Gran finale: il condominio cerca una guida. O almeno qualcuno che dica “procediamo”.',
+      'Categoria Presidente: autorità, equilibrio e capacità di dire “un attimo, parli uno alla volta”.',
+      'È il momento della poltrona più scomoda dell’androne.',
+      'Dopo il verbale, il potere. Dopo il potere, le lamentele.',
+      'Ora scegliamo chi dovrà riportare l’ordine tra box, terrazzi e millesimi.',
+      'La fascia tricolore non c’è, ma la responsabilità pesa uguale.',
+      'Gran finale: chi guiderà l’assemblea verso una fine dignitosa?',
+      'Il presidente non si sceglie. Si manifesta.',
+      'Ultima busta: quella che può cambiare il tono della serata.'
+    ],
+    reveal: [
+      'E il presidente di questa edizione della riunione di condominio è...',
+      'Per la categoria “mantenere la calma mentre tutti parlano”, vince...',
+      'La busta finale dell’assemblea condominiale proclama presidente...',
+      'Dopo una suspense degna di un conguaglio, il presidente è...',
+      'Il destino, consultati i millesimi, assegna la presidenza a...',
+      'La platea dell’androne è pronta: il presidente sarà...',
+      'Per guidare il condominio nella notte, viene chiamato...',
+      'Il grande premio “ordine del giorno” va a...',
+      'La riunione cercava un eroe. Ha trovato...',
+      'E ora, il momento che tutti temevano fingendo entusiasmo: presidente...'
+    ],
+    suspense: [
+      'Momento di suspense... chi controllerà il telecomando morale dell’assemblea?',
+      'Silenzio: stanno tremando anche le tabelle millesimali.',
+      'Il portone cigola. La democrazia anche.',
+      'Una delega cade a terra. Nessuno osa raccoglierla.',
+      'Si percepisce tensione tra il vano scale e il locale contatori.',
+      'Le luci si abbassano. Le spese no.',
+      'Il destino prende la parola e promette di essere breve.',
+      'Il condominio trattiene il fiato. L’amministratore forse no.',
+      'Suspense così densa che serve l’aerazione del vano scala.',
+      'La busta finale è più pesante del consuntivo.'
+    ],
+    winner: [
+      (n) => `l’interno ${n}!!`,
+      (n) => `l’interno ${n}! Che l’ordine del giorno ti sia lieve.`,
+      (n) => `l’interno ${n}! Il condominio è nelle tue mani. Auguri.`,
+      (n) => `l’interno ${n}! Presidente oggi, bersaglio domani.`,
+      (n) => `l’interno ${n}! Il potere logora chi lo riceve in assemblea.`,
+      (n) => `l’interno ${n}! Alzati e modera il caos.`,
+      (n) => `l’interno ${n}! La sala approva, qualcuno borbotta.`,
+      (n) => `l’interno ${n}! È tempo di dire: “andiamo avanti”.`,
+      (n) => `l’interno ${n}! Il portone applaude, l’ascensore si astiene.`,
+      (n) => `l’interno ${n}! Hai vinto il premio più rumoroso.`
+    ],
+    after: [
+      'Standing ovation, salvo impugnazioni.',
+      'Il condominio ha parlato. Forse troppo.',
+      'La presidenza è assegnata. Che inizi il contenimento dei danni.',
+      'Si prega il pubblico di non aprire altri punti all’ordine del giorno.',
+      'Applausi, brividi e una lieve minaccia di ricorso.',
+      'La democrazia condominiale sopravvive anche stavolta.',
+      'Il nuovo presidente può finalmente dire: “procediamo”.',
+      'La riunione ha una guida. Il caos non è d’accordo.',
+      'Fine della cerimonia, inizio delle osservazioni dal fondo sala.',
+      'Il premio è tuo. La responsabilità purtroppo anche.'
+    ],
+    waiting: [
+      'Gran finale: si decide chi governa il caos.',
+      'Ultima busta, massima tensione condominiale.',
+      'Ora si assegna la sedia più calda della serata.',
+      'Finale di stagione: chi presiederà l’assemblea?',
+      'La sala è pronta. Il presidente ancora non lo sa.'
+    ]
   }
 };
 
@@ -211,10 +353,8 @@ function setStage(step) {
   currentStep = step;
   const data = copy[step];
   rolePill.textContent = data.role;
-  announcement.textContent = data.intro;
-  suspenseText.textContent = step === 'secretary'
-    ? 'Prima la busta del segretario.'
-    : 'Gran finale: si decide chi governa il caos.';
+  announcement.textContent = pick(data.intro);
+  suspenseText.textContent = pick(data.waiting);
   numberDisplay.textContent = '?';
   numberDisplay.classList.remove('rolling', 'revealed', 'grand');
   spotlight.classList.remove('open');
@@ -282,35 +422,39 @@ async function revealWinner() {
   const data = copy[currentStep];
   const target = isPresident ? randomInterior([secretary]) : randomInterior();
 
-  announcement.textContent = data.reveal;
-  suspenseText.textContent = 'Momento di suspence... silenzio in sala.';
+  const revealLine = pick(data.reveal);
+  const suspenseLine = pick(data.suspense);
+  announcement.textContent = revealLine;
+  suspenseText.textContent = suspenseLine;
   playSuspenseHit();
   spotlight.classList.remove('open');
   numberDisplay.textContent = '?';
   numberDisplay.classList.remove('revealed', 'grand');
 
-  await sleep(650);
+  await sleep(readingDelay(revealLine, suspenseLine));
   spotlight.classList.add('open');
   playEnvelopeOpen();
   await rollNumbers(target, isPresident ? 3600 : 2600);
-  await sleep(isPresident ? 900 : 500);
+  await sleep(isPresident ? 1100 : 700);
 
   numberDisplay.classList.add(isPresident ? 'grand' : 'revealed');
   playRevealFanfare(isPresident);
-  announcement.textContent = data.winner(target);
-  suspenseText.textContent = data.after;
+  const winnerLine = pick(data.winner)(target);
+  const afterLine = pick(data.after);
+  announcement.textContent = winnerLine;
+  suspenseText.textContent = afterLine;
   burstConfetti(isPresident ? 150 : 80);
   playConfettiPop(isPresident);
 
   if (currentStep === 'secretary') {
     secretary = target;
     updateResults();
-    await sleep(2100);
+    await sleep(finalReadingDelay(false, winnerLine, afterLine));
     setStage('president');
   } else {
     president = target;
     updateResults();
-    await sleep(1200);
+    await sleep(finalReadingDelay(true, winnerLine, afterLine));
     showPanel(resultsPanel);
     burstConfetti(120);
     playConfettiPop(true);
