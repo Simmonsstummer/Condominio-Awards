@@ -19,3 +19,7 @@ Nota: per installarla come PWA e usare bene l'offline serve normalmente aprirla 
 ## Audio
 
 Gli effetti audio sono generati direttamente con Web Audio API: non ci sono file audio esterni, quindi la webapp resta leggera e funziona offline. Su alcuni telefoni l’audio può dipendere dalla modalità silenziosa del dispositivo o dai permessi del browser.
+
+## Licenza
+
+Distribuito sotto licenza [MIT](LICENSE). Puoi usarlo, modificarlo e ridistribuirlo liberamente, anche a scopo commerciale, mantenendo la nota di copyright.
